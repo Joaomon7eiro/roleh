@@ -1,70 +1,101 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter_web_auth/flutter_web_auth.dart';
-import 'dart:convert';
+import 'package:provider/provider.dart';
+import 'package:roleh/pages/playlist_page.dart';
+
+import '../providers/spotify_provider.dart';
+import '../widgets/genre_item.dart';
 
 class HomePage extends StatefulWidget {
-  static final routeName = "/";
+  static final routeName = "/home-page";
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  var _accessToken;
+  var maxSelected = 5;
+
+  var _genres;
+  var _selectedGenres = [];
+
+  void increment(genre) {
+    if (_selectedGenres.length < maxSelected) {
+      setState(() {
+        _selectedGenres.add(genre);
+      });
+    }
+  }
+
+  void decrement(genre) {
+    if (_selectedGenres.length > 0) {
+      setState(() {
+        _selectedGenres.remove(genre);
+      });
+    }
+  }
+
+  bool exists(genre) {
+    return _selectedGenres.contains(genre);
+  }
+
+  int onSelect() {
+    return _selectedGenres.length;
+  }
+
+  void createPlaylist() {
+    print(_selectedGenres);
+    if (_selectedGenres.length > 0) {
+      String genresString = _selectedGenres
+          .toString()
+          .substring(1, _selectedGenres.toString().length - 1);
+      Navigator.pushNamed(context, PlaylistPage.routeName,
+          arguments: genresString.replaceAll(" ", ""));
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    authenticate();
-  }
-
-  void authenticate() async {
-    var url = "https://accounts.spotify.com";
-    var redirectUri = "com.joaomonteirodev.roleh://callback";
-    var clientId = "ef6110c9782d4a20a6ec09da44d51911";
-    var clientSecret = "b62c350a38d345e0af11adc23bc6a289";
-    var responseType = "code";
-
-    final result = await FlutterWebAuth.authenticate(
-      url:
-          "$url/authorize?client_id=$clientId&response_type=$responseType&redirect_uri=$redirectUri",
-      callbackUrlScheme: "com.joaomonteirodev.roleh",
-    );
-
-    var code = Uri.parse(result).queryParameters['code'];
-    print('token $code');
-
-    Map<String, String> body = {
-      'grant_type': 'authorization_code',
-      'code': code,
-      'redirect_uri': redirectUri,
-    };
-    var bytes = utf8.encode('$clientId:$clientSecret');
-    var base64Auth = base64.encode(bytes);
-
-    var response = await http.post(
-      '$url/api/token',
-      body: body,
-      headers: {
-        "Authorization": 'Basic  $base64Auth',
-      },
-    );
-    _accessToken = jsonDecode(response.body);
-    print('response ${response.body}');
-    print('at ${_accessToken['access_token']}');
+    Provider.of<SpotifyProvider>(context, listen: false)
+        .fetchAvailableGenreSeeds();
   }
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<SpotifyProvider>(context);
+    _genres = provider.getGenres;
+
     return Scaffold(
-      body: Center(
-        child: FlatButton(
-          color: Colors.green,
-          onPressed: () async {},
-          child: Text("login"),
-        ),
+        body: SafeArea(
+      child: CustomScrollView(
+        slivers: <Widget>[
+          SliverToBoxAdapter(
+              child: Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text("Escolha os generos"),
+                  RaisedButton(
+                    onPressed: createPlaylist,
+                    child: Text("criar playlist"),
+                  )
+                ],
+              ),
+              Text("${_selectedGenres.toString()}")
+            ],
+          )),
+          SliverGrid(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) => GenreItem(
+                  _genres[index], onSelect, increment, decrement, exists),
+              childCount: _genres.length,
+            ),
+            gridDelegate:
+                SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 5),
+          )
+        ],
       ),
-    );
+    ));
   }
 }
