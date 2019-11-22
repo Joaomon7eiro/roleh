@@ -25,11 +25,24 @@ class _AuthPageState extends State<AuthPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: FlatButton(
-          color: Colors.green,
-          onPressed: connect,
-          child: Text("login"),
+      body: Container(
+        width: double.infinity,
+        color: Colors.pink.shade50,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Text(
+              "Gerador de Playlists",
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+            ),
+            RaisedButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              color: Colors.greenAccent,
+              onPressed: connect,
+              child: Text("Entrar"),
+            ),
+          ],
         ),
       ),
     );

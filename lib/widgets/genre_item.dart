@@ -15,8 +15,8 @@ class GenreItem extends StatefulWidget {
 
 class _GenreItemState extends State<GenreItem>
     with AutomaticKeepAliveClientMixin {
-  Color selectedColor = Colors.green.shade600;
-  Color defaultColor = Colors.green.shade300;
+  Color selectedColor = Colors.amber.shade600;
+  Color defaultColor = Colors.amberAccent;
   bool isSelected = false;
 
   void handleTap() {
@@ -44,14 +44,18 @@ class _GenreItemState extends State<GenreItem>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return InkWell(
-      child: Container(
-        color: isSelected ? selectedColor : defaultColor,
-        margin: EdgeInsets.all(10),
-        child: Center(
-          child: Text(
-            widget.genre,
-            textAlign: TextAlign.center,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(25),
+        child: Container(
+          color: isSelected ? selectedColor : defaultColor,
+          child: Center(
+            child: Text(
+              widget.genre,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
         ),
       ),

@@ -67,34 +67,71 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
         body: SafeArea(
-      child: CustomScrollView(
-        slivers: <Widget>[
-          SliverToBoxAdapter(
-              child: Column(
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text("Escolha os generos"),
-                  RaisedButton(
-                    onPressed: createPlaylist,
-                    child: Text("criar playlist"),
-                  )
-                ],
+      child: Container(
+        color: Colors.pink.shade50,
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        child: CustomScrollView(
+          slivers: <Widget>[
+            SliverToBoxAdapter(
+                child: Column(
+              children: <Widget>[
+                Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      Container(
+                        child: Text(
+                          "Escolha os gêneros músicais (max 5)",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 25),
+                        ),
+                        width: MediaQuery.of(context).size.width * 0.5,
+                      ),
+                      RaisedButton(
+                        color: Colors.greenAccent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        onPressed: createPlaylist,
+                        child: Text(
+                          "Gerar Playlist",
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      )
+                    ],
+                  ),
+                  margin: EdgeInsets.symmetric(vertical: 20),
+                ),
+                Container(
+                  margin: EdgeInsets.only(bottom: 30),
+                  child: _selectedGenres.length > 0
+                      ? Text(
+                          "Selecionados: ${_selectedGenres.toString().replaceAll("[", "").replaceAll("]", "")}",
+                          style: TextStyle(
+                              fontSize: 16, fontStyle: FontStyle.italic),
+                        )
+                      : Text(
+                          "Nenhum gênero selecionado",
+                          style: TextStyle(
+                              fontSize: 16, fontStyle: FontStyle.italic),
+                        ),
+                )
+              ],
+            )),
+            SliverGrid(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) => GenreItem(
+                    _genres[index], onSelect, increment, decrement, exists),
+                childCount: _genres.length,
               ),
-              Text("${_selectedGenres.toString()}")
-            ],
-          )),
-          SliverGrid(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) => GenreItem(
-                  _genres[index], onSelect, increment, decrement, exists),
-              childCount: _genres.length,
-            ),
-            gridDelegate:
-                SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 5),
-          )
-        ],
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4,
+                  childAspectRatio: 2 / 1,
+                  crossAxisSpacing: 5,
+                  mainAxisSpacing: 10),
+            )
+          ],
+        ),
       ),
     ));
   }
