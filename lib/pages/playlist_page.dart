@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/spotify_provider.dart';
+import '../providers/filter_provider.dart';
 import '../models/track.dart';
 import '../widgets/track_item.dart';
 
@@ -14,26 +15,25 @@ class PlaylistPage extends StatefulWidget {
 
 class _PlaylistPageState extends State<PlaylistPage> {
   List<Track> recommendations = [];
-  var currentGenres;
+  var currentParams;
 
   void savePlaylist(context) {
-    var provider = Provider.of<SpotifyProvider>(context);
+    var provider = Provider.of<SpotifyProvider>(context, listen: false);
     List<String> uris = recommendations.map((rec) {
       return rec.uri;
     }).toList();
     var urisFormat = {"uris": uris};
-    provider.createPlaylist("$currentGenres", urisFormat);
+    provider.createPlaylist("$currentParams", urisFormat);
     Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    var genres = ModalRoute.of(context).settings.arguments;
+    var params = ModalRoute.of(context).settings.arguments;
     var provider = Provider.of<SpotifyProvider>(context);
-    if (currentGenres != genres) {
-      currentGenres = genres;
-      provider.clearRecommendations();
-      provider.fetchRecommendations(genres);
+    if (currentParams != params) {
+      currentParams = params;
+      provider.fetchRecommendations(params);
     }
     recommendations = provider.recommendations;
 

@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:roleh/providers/filter_provider.dart';
+import 'package:provider/provider.dart';
 
 class GenreItem extends StatefulWidget {
   final genre;
-  final Function onSelect;
-  final Function increment;
-  final Function decrement;
-  final Function exists;
-  const GenreItem(
-      this.genre, this.onSelect, this.increment, this.decrement, this.exists);
+  const GenreItem(this.genre);
 
   @override
   _GenreItemState createState() => _GenreItemState();
@@ -19,22 +16,22 @@ class _GenreItemState extends State<GenreItem>
   Color defaultColor = Colors.amberAccent;
   bool isSelected = false;
 
-  void handleTap() {
-    var exists = widget.exists(widget.genre);
+  void handleTap(FilterProvider provider) {
+    var exists = provider.checkFilterExists(widget.genre);
 
-    var number = widget.onSelect();
+    var number = provider.selectedFiltersNumber;
     if (number < 5) {
       if (exists) {
-        widget.decrement(widget.genre);
+        provider.removeFilter(widget.genre);
       } else {
-        widget.increment(widget.genre);
+        provider.addFilter(widget.genre);
       }
       setState(() {
         isSelected = !exists;
       });
     } else {
       if (exists) {
-        widget.decrement(widget.genre);
+        provider.removeFilter(widget.genre);
         setState(() {
           isSelected = false;
         });
@@ -45,6 +42,8 @@ class _GenreItemState extends State<GenreItem>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    var provider = Provider.of<FilterProvider>(context);
+
     return InkWell(
       child: ClipRRect(
         borderRadius: BorderRadius.circular(25),
@@ -59,7 +58,9 @@ class _GenreItemState extends State<GenreItem>
           ),
         ),
       ),
-      onTap: handleTap,
+      onTap: () {
+        handleTap(provider);
+      },
     );
   }
 

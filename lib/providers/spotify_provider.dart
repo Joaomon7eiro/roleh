@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'dart:convert';
 
@@ -11,11 +12,7 @@ class SpotifyProvider extends ChangeNotifier {
   var genres = [];
   List<Track> recommendations = [];
   User currentUser;
-
-  void clearRecommendations() {
-    recommendations = [];
-    notifyListeners();
-  }
+  Dio dio = Dio();
 
   void fetchUser() async {
     var response = await http.get('https://api.spotify.com/v1/me',
@@ -43,24 +40,38 @@ class SpotifyProvider extends ChangeNotifier {
     print("error fetching genres");
   }
 
-  void fetchRecommendations(genre) async {
+  void fetchRecommendations(params) async {
+    recommendations = [];
+
     var seedArtists = "";
-    var seedGenres = "$genre";
     var seedTracks = "";
     var limit = 50;
 
-    var response = await http.get(
-        "https://api.spotify.com/v1/recommendations?seed_artists=$seedArtists&seed_genres=$seedGenres&seed_tracks=$seedTracks&limit=$limit",
-        headers: {"Authorization": 'Bearer $accessToken'});
+    var queryParams = <String, dynamic>{
+      ...params,
+      "seed_artists": seedArtists,
+      "seed_tracks": seedTracks,
+      "limit": limit,
+    };
 
-    print('recommendation ${response.body}');
+    print(queryParams);
+    var response;
+    try {
+      response = await dio.get("https://api.spotify.com/v1/recommendations",
+          queryParameters: queryParams,
+          options: Options(headers: {"Authorization": 'Bearer $accessToken'}));
+    } catch (e) {
+      print(e);
+      return;
+    }
+
+    print('recommendation ${response.data}');
     if (response.statusCode == 200) {
-      var recommendationsJson = jsonDecode(response.body)["tracks"];
+      var recommendationsJson = response.data["tracks"];
       recommendations = [];
       for (var rec in recommendationsJson) {
         recommendations.add(Track.fromJson(rec));
       }
-      print('notify');
       notifyListeners();
       return;
     }
@@ -141,7 +152,6 @@ class SpotifyProvider extends ChangeNotifier {
     var responseJson = jsonDecode(response.body);
     accessToken = responseJson['access_token'];
     print('responseJson = ${response.body}');
-    print('access_token = $accessToken');
 
     fetchUser();
     return accessToken != null;
