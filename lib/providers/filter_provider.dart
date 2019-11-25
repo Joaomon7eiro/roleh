@@ -88,6 +88,24 @@ class FilterProvider extends ChangeNotifier {
 //    "max_time_signature": 100,
   };
 
+  bool handleTap(filter, key) {
+    var exists = checkFilterExists(filter, key);
+
+    if (selectedFiltersNumber < 5) {
+      if (exists) {
+        removeFilter(filter, key);
+      } else {
+        addFilter(filter, key);
+      }
+      return !exists;
+    } else {
+      if (exists) {
+        removeFilter(filter, key);
+      }
+      return false;
+    }
+  }
+
   void addFilter(filter, key) {
     if (selectedFiltersNumber < _maxSelected) {
       selectedFilters[key].add(filter);
@@ -136,6 +154,7 @@ class FilterProvider extends ChangeNotifier {
       }
       fSelectedFilters[key] = data;
     });
+    print("FILTERED PARAAMS $selectedFilters");
     return fSelectedFilters;
   }
 }

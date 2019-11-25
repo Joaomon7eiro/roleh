@@ -17,29 +17,6 @@ class _GenreItemState extends State<GenreItem>
   bool isSelected = false;
   var key = "seed_genres";
 
-  void handleTap(FilterProvider provider) {
-    var exists = provider.checkFilterExists(widget.genre, key);
-
-    var number = provider.selectedFiltersNumber;
-    if (number < 5) {
-      if (exists) {
-        provider.removeFilter(widget.genre, key);
-      } else {
-        provider.addFilter(widget.genre, key);
-      }
-      setState(() {
-        isSelected = !exists;
-      });
-    } else {
-      if (exists) {
-        provider.removeFilter(widget.genre, key);
-        setState(() {
-          isSelected = false;
-        });
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -60,7 +37,9 @@ class _GenreItemState extends State<GenreItem>
         ),
       ),
       onTap: () {
-        handleTap(provider);
+        setState(() {
+          isSelected = provider.handleTap(widget.genre, key);
+        });
       },
     );
   }
