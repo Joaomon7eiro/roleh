@@ -11,6 +11,7 @@ class SpotifyProvider extends ChangeNotifier {
   var accessToken;
   var genres = [];
   List<Track> recommendations = [];
+  List<dynamic> searchResults = [];
   User currentUser;
   Dio dio = Dio();
 
@@ -106,6 +107,19 @@ class SpotifyProvider extends ChangeNotifier {
     print(response.body);
     if (response.statusCode == 201) {
       print("playlist criada com sucesso");
+    }
+  }
+
+  void search(type, query) async {
+    var response = await dio.get(
+      "https://api.spotify.com/v1/search",
+      queryParameters: {"q": query, "type": type},
+      options: Options(headers: {"Authorization": accessToken}),
+    );
+
+    print(response.data);
+    if (response.statusCode == 200) {
+      print("deu bao o search");
     }
   }
 

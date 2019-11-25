@@ -25,46 +25,80 @@ class _AdvancedPageState extends State<AdvancedPage> {
           children: <Widget>[
             AdvancedItem(
               name: "acousticness",
+              title: "Acústico",
+              label1: "Som gravado",
+              label2: "Som acústico",
             ),
             AdvancedItem(
               name: "danceability",
+              title: "Dançante",
+              label1: "Não mesmo",
+              label2: "Muito dançante",
             ),
-            AdvancedItem(
-              name: "duration_ms",
-            ),
+//            AdvancedItem(
+//              name: "duration_ms",
+//            ),
             AdvancedItem(
               name: "energy",
+              title: "Energia",
+              label1: "Calma",
+              label2: "Agitada",
             ),
             AdvancedItem(
               name: "instrumentalness",
+              title: "Instrumental",
+              label1: "Com Vocal",
+              label2: "Sem Vocal",
             ),
-            AdvancedItem(
-              name: "key",
-            ),
+
             AdvancedItem(
               name: "liveness",
+              title: "Ao vivo",
+              label1: "Som gravado",
+              label2: "Som ao vivo",
             ),
+//            AdvancedItem(
+//              name: "loudness",
+//            ),
             AdvancedItem(
-              name: "loudness",
-            ),
-            AdvancedItem(
-              name: "mode",
+              name: "valence",
+              title: "Sensação",
+              label1: "Triste",
+              label2: "Feliz",
             ),
             AdvancedItem(
               name: "popularity",
+              title: "Popularidade atualmente",
+              label1: "Toca em barzinhos",
+              label2: "Turnê Mundial",
             ),
-            AdvancedItem(
-              name: "speechiness",
-            ),
+//            AdvancedItem(
+//              name: "speechiness",
+//              title: "acousticness",
+//              label1: "acousticness",
+//              label2: "acousticness",
+//            ),
             AdvancedItem(
               name: "tempo",
+              title: "BPM",
+              label1: "Lenta",
+              label2: "Rápida",
             ),
             AdvancedItem(
-              name: "time_signature",
+              name: "key",
+              title: "Tom da música",
+              label1: "DÓ",
+              label2: "SÍ",
             ),
             AdvancedItem(
-              name: "valence",
+              name: "mode",
+              title: "Escala da música",
+              label1: "Menor",
+              label2: "Maior",
             ),
+//            AdvancedItem(
+//              name: "time_signature",
+//            ),
           ],
         ),
       ),

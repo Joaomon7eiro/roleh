@@ -6,9 +6,10 @@ import '../providers/filter_provider.dart';
 
 class AdvancedItem extends StatefulWidget {
   final String name;
+  final String title;
   final String label1;
   final String label2;
-  const AdvancedItem({this.name, this.label1, this.label2});
+  const AdvancedItem({this.name, this.label1, this.label2, this.title});
   @override
   _AdvancedItemState createState() => _AdvancedItemState();
 }
@@ -41,17 +42,11 @@ class _AdvancedItemState extends State<AdvancedItem> {
   Widget build(BuildContext context) {
     var provider = Provider.of<FilterProvider>(context, listen: false);
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(widget.name),
-              //Text(widget.name),
-            ],
-          ),
+          Text(widget.title),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -91,6 +86,13 @@ class _AdvancedItemState extends State<AdvancedItem> {
                   child: Text(_values.end.toStringAsFixed(2)),
                 ),
               ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(widget.label1),
+              Text(widget.label2),
             ],
           ),
           Divider()
