@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 
 class FilterProvider extends ChangeNotifier {
   var _maxSelected = 5;
-  List<String> selectedFilters = [];
+  var selectedFilters = {
+    "seed_genres": [],
+    "seed_artists": [],
+    "seed_tracks": [],
+  };
 
   var filterDivisions = {
     "limit": 10,
@@ -84,25 +88,54 @@ class FilterProvider extends ChangeNotifier {
 //    "max_time_signature": 100,
   };
 
-  void addFilter(filter) {
-    if (selectedFilters.length < _maxSelected) {
-      selectedFilters.add(filter);
+  void addFilter(filter, key) {
+    if (selectedFiltersNumber < _maxSelected) {
+      selectedFilters[key].add(filter);
       notifyListeners();
     }
   }
 
-  void removeFilter(filter) {
-    if (selectedFilters.length > 0) {
-      selectedFilters.remove(filter);
+  void removeFilter(filter, key) {
+    if (selectedFiltersNumber > 0) {
+      selectedFilters[key].remove(filter);
       notifyListeners();
     }
   }
 
-  bool checkFilterExists(filter) {
-    return selectedFilters.contains(filter);
+  bool checkFilterExists(filter, key) {
+    return selectedFilters[key].contains(filter);
   }
 
   int get selectedFiltersNumber {
-    return selectedFilters.length;
+    var number = 0;
+    selectedFilters.forEach((key, values) {
+      number += values.length;
+    });
+    return number;
+  }
+
+  String get getAllFilters {
+    var filters = "";
+    selectedFilters.forEach((key, values) {
+      for (var value in values) {
+        filters += value + ",";
+      }
+    });
+    return filters;
+  }
+
+  Map<String, String> get getFilters {
+    Map<String, String> fSelectedFilters = {};
+    selectedFilters.forEach((key, values) {
+      String data = "";
+      for (var i = 0; i < values.length; i++) {
+        data += values[i];
+        if (i + 1 < values.length) {
+          data += ",";
+        }
+      }
+      fSelectedFilters[key] = data;
+    });
+    return fSelectedFilters;
   }
 }

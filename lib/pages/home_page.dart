@@ -18,16 +18,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var _selectedGenres;
-
-  void createPlaylist() {
-    if (_selectedGenres.length > 0) {
-      String genresString = _selectedGenres
-          .toString()
-          .substring(1, _selectedGenres.toString().length - 1);
-      String formattedGenres = genresString.replaceAll(" ", "");
+  void createPlaylist(FilterProvider provider) {
+    if (provider.selectedFiltersNumber > 0) {
       var queryParams = {
-        "seed_genres": formattedGenres,
+        ...provider.getFilters,
         ...Provider.of<FilterProvider>(context, listen: false).filterValues
       };
       Navigator.pushNamed(context, PlaylistPage.routeName,
@@ -45,7 +39,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<FilterProvider>(context);
-    _selectedGenres = provider.selectedFilters;
 
     return Scaffold(
       body: SafeArea(
@@ -78,7 +71,9 @@ class _HomePageState extends State<HomePage> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            onPressed: createPlaylist,
+                            onPressed: () {
+                              createPlaylist(provider);
+                            },
                             child: Text(
                               "Gerar Playlist",
                               style: TextStyle(fontSize: 15),
@@ -106,9 +101,9 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Container(
                   margin: EdgeInsets.only(bottom: 10),
-                  child: _selectedGenres.length > 0
+                  child: provider.selectedFiltersNumber > 0
                       ? Text(
-                          "Selecionados: ${_selectedGenres.toString().replaceAll("[", "").replaceAll("]", "")}",
+                          "Selecionados: ${provider.getAllFilters.replaceAll("[", "").replaceAll("]", "")}",
                           style: TextStyle(
                               fontSize: 16, fontStyle: FontStyle.italic),
                         )
