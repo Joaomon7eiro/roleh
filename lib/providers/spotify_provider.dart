@@ -111,15 +111,20 @@ class SpotifyProvider extends ChangeNotifier {
   }
 
   void search(type, query) async {
+    if (query == "" || query == null) return;
+    var queryParams = <String, dynamic>{"q": query, "type": type};
+    print(queryParams);
     var response = await dio.get(
       "https://api.spotify.com/v1/search",
-      queryParameters: {"q": query, "type": type},
-      options: Options(headers: {"Authorization": accessToken}),
+      queryParameters: queryParams,
+      options: Options(headers: {"Authorization": 'Bearer $accessToken'}),
     );
 
     print(response.data);
     if (response.statusCode == 200) {
-      print("deu bao o search");
+      print(response.data["artists"]["items"]);
+      searchResults = response.data["artists"]["items"];
+      //notifyListeners();
     }
   }
 

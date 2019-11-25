@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/spotify_provider.dart';
 
 class SearchController extends SearchDelegate<String> {
   @override
@@ -33,7 +36,15 @@ class SearchController extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    // TODO: implement buildSuggestions
-    return null;
+    var provider = Provider.of<SpotifyProvider>(context);
+    provider.search("artist", query.replaceAll(" ", "+"));
+    var results = provider.searchResults;
+
+    return ListView.builder(
+      itemCount: results.length,
+      itemBuilder: (context, index) {
+        return Text("${results[index]["name"]}");
+      },
+    );
   }
 }
