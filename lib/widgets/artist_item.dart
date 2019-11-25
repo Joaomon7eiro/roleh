@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../models/track.dart';
+import '../models/artist.dart';
 
-class TrackItem extends StatelessWidget {
-  final Track track;
-
-  const TrackItem(this.track);
+class ArtistItem extends StatelessWidget {
+  final Artist artist;
+  const ArtistItem(this.artist);
 
   @override
   Widget build(BuildContext context) {
@@ -13,8 +12,8 @@ class TrackItem extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          track.image != null
-              ? Image.network(track.image, width: 200, height: 200)
+          artist.image != null
+              ? Image.network(artist.image, width: 200, height: 200)
               : Container(
                   color: Colors.purple.shade300,
                   width: 200,
@@ -22,12 +21,8 @@ class TrackItem extends StatelessWidget {
                 ),
           FittedBox(
             fit: BoxFit.scaleDown,
-            child: Text(track.name),
-          ),
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(track.artists[0].name),
-          ),
+            child: Text(artist.name),
+          )
         ],
       ),
     );

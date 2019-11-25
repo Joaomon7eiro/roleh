@@ -5,11 +5,18 @@ class Artist {
   String href;
   String id;
   String name;
+  String image;
   String type;
   String uri;
 
   Artist(
-      {this.externalUrls, this.href, this.id, this.name, this.type, this.uri});
+      {this.externalUrls,
+      this.href,
+      this.id,
+      this.image,
+      this.name,
+      this.type,
+      this.uri});
 
   Artist.fromJson(Map<String, dynamic> json) {
     externalUrls = json['external_urls'] != null
@@ -18,6 +25,9 @@ class Artist {
     href = json['href'];
     id = json['id'];
     name = json['name'];
+    image = json['images'] != null && json['images'].length > 0
+        ? json['images'][0]["url"]
+        : null;
     type = json['type'];
     uri = json['uri'];
   }
@@ -32,6 +42,7 @@ class Artist {
     data['name'] = this.name;
     data['type'] = this.type;
     data['uri'] = this.uri;
+    data['image'] = this.uri;
     return data;
   }
 }

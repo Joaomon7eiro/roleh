@@ -35,9 +35,6 @@ class _AdvancedPageState extends State<AdvancedPage> {
               label1: "Não mesmo",
               label2: "Muito dançante",
             ),
-//            AdvancedItem(
-//              name: "duration_ms",
-//            ),
             AdvancedItem(
               name: "energy",
               title: "Energia",
@@ -57,9 +54,6 @@ class _AdvancedPageState extends State<AdvancedPage> {
               label1: "Som gravado",
               label2: "Som ao vivo",
             ),
-//            AdvancedItem(
-//              name: "loudness",
-//            ),
             AdvancedItem(
               name: "valence",
               title: "Sensação",
@@ -72,12 +66,6 @@ class _AdvancedPageState extends State<AdvancedPage> {
               label1: "Toca em barzinhos",
               label2: "Turnê Mundial",
             ),
-//            AdvancedItem(
-//              name: "speechiness",
-//              title: "acousticness",
-//              label1: "acousticness",
-//              label2: "acousticness",
-//            ),
             AdvancedItem(
               name: "tempo",
               title: "BPM",
@@ -96,6 +84,18 @@ class _AdvancedPageState extends State<AdvancedPage> {
               label1: "Menor",
               label2: "Maior",
             ),
+//            AdvancedItem(
+//              name: "loudness",
+//            ),
+//            AdvancedItem(
+//              name: "duration_ms",
+//            ),
+//            AdvancedItem(
+//              name: "speechiness",
+//              title: "acousticness",
+//              label1: "acousticness",
+//              label2: "acousticness",
+//            ),
 //            AdvancedItem(
 //              name: "time_signature",
 //            ),

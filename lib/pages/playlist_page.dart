@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/spotify_provider.dart';
 import '../providers/filter_provider.dart';
 import '../models/track.dart';
-import '../widgets/track_item.dart';
+import '../widgets/playlist_track_item.dart';
 
 class PlaylistPage extends StatefulWidget {
   static final routeName = "/playlist-page";
@@ -15,6 +15,7 @@ class PlaylistPage extends StatefulWidget {
 
 class _PlaylistPageState extends State<PlaylistPage> {
   List<Track> recommendations = [];
+  TextEditingController _textController = TextEditingController();
   var currentParams;
 
   void savePlaylist(context) {
@@ -23,7 +24,11 @@ class _PlaylistPageState extends State<PlaylistPage> {
       return rec.uri;
     }).toList();
     var urisFormat = {"uris": uris};
-    provider.createPlaylist("$currentParams", urisFormat);
+    var playlistName = _textController.text.isEmpty
+        ? currentParams["seed_genres"]
+        : _textController.text;
+
+    provider.createPlaylist(playlistName, urisFormat);
     Navigator.pop(context);
   }
 
@@ -62,9 +67,18 @@ class _PlaylistPageState extends State<PlaylistPage> {
                   ),
                 ),
               ),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: TextField(
+                    controller: _textController,
+                    decoration: InputDecoration(labelText: "Nome da Playlist"),
+                  ),
+                ),
+              ),
               SliverList(
                 delegate: SliverChildBuilderDelegate((context, index) {
-                  return TrackItem(recommendations[index]);
+                  return PlaylistTrackItem(recommendations[index]);
                 }, childCount: recommendations.length),
               )
             ],

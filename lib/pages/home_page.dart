@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<FilterProvider>(context);
-    _selectedGenres = provider.selectedGenres;
+    _selectedGenres = provider.selectedFilters;
 
     return Scaffold(
       body: SafeArea(
@@ -89,8 +89,8 @@ class _HomePageState extends State<HomePage> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            onPressed: () async {
-                              var data = await Navigator.pushNamed(
+                            onPressed: () {
+                              Navigator.pushNamed(
                                   context, AdvancedPage.routeName);
                             },
                             child: Text(

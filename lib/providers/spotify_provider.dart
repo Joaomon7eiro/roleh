@@ -6,14 +6,21 @@ import 'dart:convert';
 
 import '../models/track.dart';
 import '../models/user.dart';
+import '../models/artist.dart';
 
 class SpotifyProvider extends ChangeNotifier {
   var accessToken;
+  User currentUser;
+
+  Dio dio = Dio();
+
   var genres = [];
   List<Track> recommendations = [];
-  List<dynamic> searchResults = [];
-  User currentUser;
-  Dio dio = Dio();
+
+  List<Artist> searchArtists = [];
+  List<Track> searchTracks = [];
+  String lastQuery;
+  String lastType;
 
   void fetchUser() async {
     var response = await http.get('https://api.spotify.com/v1/me',
@@ -111,9 +118,17 @@ class SpotifyProvider extends ChangeNotifier {
   }
 
   void search(type, query) async {
-    if (query == "" || query == null) return;
+    if ((lastQuery == query && type == lastType) ||
+        query == "" ||
+        query == null) {
+      return;
+    }
+
+    lastType = type;
+    lastQuery = query;
+
     var queryParams = <String, dynamic>{"q": query, "type": type};
-    print(queryParams);
+
     var response = await dio.get(
       "https://api.spotify.com/v1/search",
       queryParameters: queryParams,
@@ -121,11 +136,29 @@ class SpotifyProvider extends ChangeNotifier {
     );
 
     print(response.data);
+
     if (response.statusCode == 200) {
-      print(response.data["artists"]["items"]);
-      searchResults = response.data["artists"]["items"];
-      //notifyListeners();
+      var data = response.data['${type}s']["items"];
+
+      type == "artist" ? searchArtists = [] : searchTracks = [];
+
+      for (var item in data) {
+        if (type == "artist") {
+          searchArtists.add(Artist.fromJson(item));
+        } else {
+          searchTracks.add(Track.fromJson(item));
+        }
+      }
+      notifyListeners();
     }
+  }
+
+  List<Artist> get getSearchArtists {
+    return searchArtists;
+  }
+
+  List<Track> get getSearchTracks {
+    return searchTracks;
   }
 
   List<dynamic> get getGenres {

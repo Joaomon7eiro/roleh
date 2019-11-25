@@ -9,6 +9,7 @@ class Track {
   ExternalUrl externalUrls;
   String href;
   String id;
+  String image;
   bool isPlayable;
   String name;
   String previewUrl;
@@ -27,6 +28,7 @@ class Track {
       this.isPlayable,
       this.name,
       this.previewUrl,
+      this.image,
       this.trackNumber,
       this.type,
       this.uri});
@@ -51,6 +53,9 @@ class Track {
     previewUrl = json['preview_url'];
     trackNumber = json['track_number'];
     type = json['type'];
+    image = json['album']["images"].length > 0
+        ? json['album']["images"][0]["url"]
+        : null;
     uri = json['uri'];
   }
 
