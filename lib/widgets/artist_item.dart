@@ -25,10 +25,12 @@ class _ArtistItemState extends State<ArtistItem>
     return InkWell(
       onTap: () {
         setState(() {
-          isSelected = provider.handleTap(widget.artist.uri, key);
+          isSelected = provider.handleTap(widget.artist.id, key);
         });
       },
       child: Container(
+        width: 200,
+        height: 200,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
@@ -37,13 +39,11 @@ class _ArtistItemState extends State<ArtistItem>
                     opacity: isSelected ? 0.5 : 1,
                     child: Image.network(
                       widget.artist.image,
-                      width: 200,
-                      height: 200,
                       fit: BoxFit.cover,
                     ),
                   )
                 : Container(
-                    color: Colors.purple.shade300,
+                    color: Colors.blue.shade300,
                     width: 200,
                     height: 200,
                   ),

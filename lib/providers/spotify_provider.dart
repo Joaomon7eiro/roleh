@@ -51,14 +51,10 @@ class SpotifyProvider extends ChangeNotifier {
   void fetchRecommendations(params) async {
     recommendations = [];
 
-    var seedArtists = "";
-    var seedTracks = "";
     var limit = 50;
 
     var queryParams = <String, dynamic>{
       ...params,
-      "seed_artists": seedArtists,
-      "seed_tracks": seedTracks,
       "limit": limit,
     };
 
