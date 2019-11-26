@@ -22,6 +22,9 @@ class _ArtistPageState extends State<ArtistPage> {
         Container(
           padding: EdgeInsets.all(10),
           child: TextField(
+            onSubmitted: (value) {
+              Provider.of<SpotifyProvider>(context).search("artist", value);
+            },
             controller: searchController,
             decoration: InputDecoration(
               labelText: "Buscar Artistas",

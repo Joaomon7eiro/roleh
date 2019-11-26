@@ -22,6 +22,9 @@ class _TrackPageState extends State<TrackPage> {
         Container(
           padding: EdgeInsets.all(10),
           child: TextField(
+            onSubmitted: (value) {
+              Provider.of<SpotifyProvider>(context).search("track", value);
+            },
             controller: searchController,
             decoration: InputDecoration(
               labelText: "Buscar Mũsicas",
